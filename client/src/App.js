@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
-import {Button, ListGroup, Table} from 'react-bootstrap';
+import {Button, ListGroup, Table, Dropdown} from 'react-bootstrap';
 import Header from './Header.js'
 import {Route, Link, withRouter} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import {stringify} from "query-string";
+import './App.css';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
 
 
 export class Home extends Component {
@@ -151,10 +153,12 @@ export class User extends Component {
 export class SelectedUser extends Component {
 
     state = {
-        selectIdx: 0, // 시작은 무조건 유저 프로필
+        selectedId: 0, // 시작은 무조건 유저 프로필
         id: -1,
-        data: null
+        data: null,
+        todo: null
     }
+
 
     async componentDidMount() {
         //fetch
@@ -171,6 +175,22 @@ export class SelectedUser extends Component {
         this.props.history.goBack();
     }
 
+    selectId = async (id) => {
+        this.setState({
+            selectedId: id
+        })
+
+        //fetch
+
+        let obj = await axios.get('https://koreanjson.com/todos?/userId=' + id);
+        console.log(obj);
+        this.setState({
+            todos: obj.data,
+        })
+
+
+    }
+
 
     render() {
 
@@ -178,22 +198,75 @@ export class SelectedUser extends Component {
         let imgRendering = -1;
         if (this.state.data) {
             imgRendering = (<img src={`https://randomuser.me/api/portraits/men/${this.state.data.id}.jpg`}/>)
-            TableRow =  (
+            TableRow = (
                 <tr>
                     <td>{this.state.data.name}</td>
                     <td>{this.state.data.email}</td>
                     <td>{this.state.data.phone}</td>
                 </tr>
             )
+        }
+
+        let content = '';
+        if (this.state.selectedId === 0) {
+            content = (
+                <div>
+                    <Table striped bordered hover size="sm">
+                        <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>모바일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {TableRow}
+                        </tbody>
+                    </Table>
+                </div>
+            )
+        } else {
+
+            if (this.state.todos) {
+                content = (
+                    <Dropdown>
+                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                            모든 투두
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className = "dropdown-menu">
+                            {
+                                this.state.todos.map((todo) => {
+                                    console.log(todo.completed);
+                                    return (
+                                        <Dropdown.Item href="#/action-1" key={todo.id}>
+                                            {/*<div><i className={(todo.completed)? "fas fa-check" : ""}/><span>{todo.title}</span></div>*/}
+                                            <div><FontAwesomeIcon icon={(todo.completed)? faCheckSquare : ""}/><span>{todo.title}</span></div>
+                                        </Dropdown.Item>
+                                    )
+                                })
+                            }
+
+                        </Dropdown.Menu>
+                    </Dropdown>
+                )
+            }
 
         }
+
 
         return (
             <div>
                 <div>
                     <ListGroup>
-                        <ListGroup.Item>유저프로필</ListGroup.Item>
-                        <ListGroup.Item>투두</ListGroup.Item>
+                        <ListGroup.Item className={this.state.selectedId === 0 ? "active" : ''} onClick={() => {
+
+                            this.selectId(0)
+                        }}>유저프로필</ListGroup.Item>
+                        <ListGroup.Item className={this.state.selectedId === 1 ? "active" : ''} onClick={() => {
+
+                            this.selectId(1)
+                        }}>투두</ListGroup.Item>
                     </ListGroup>
                 </div>
                 <div>
@@ -201,21 +274,8 @@ export class SelectedUser extends Component {
                     <Button variant="success" onClick={this.goBack}>뒤로가기</Button>
                 </div>
                 <div>
-                    {imgRendering = imgRendering === -1 ?  ' ' : imgRendering}
-                    <div>
-                        <Table striped bordered hover size="sm">
-                            <thead>
-                            <tr>
-                                <th>이름</th>
-                                <th>이메일</th>
-                                <th>모바일</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {TableRow}
-                            </tbody>
-                        </Table>
-                    </div>
+                    {imgRendering = imgRendering === -1 ? ' ' : imgRendering}
+                    {content}
                 </div>
             </div>
         )
