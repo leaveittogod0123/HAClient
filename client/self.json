@@ -1,0 +1,57 @@
+{
+  "client": {
+    "basic": {
+      "json": 3,
+      "setting": 1,
+      "design": 3,
+      "readme": 3,
+      "render_01": 3,
+      "render_02": 3,
+      "router": 3,
+      "fetch": 3,
+      "cond_render": 3,
+      "css": 2,
+      "git": 2
+    },
+    "advanced": {
+      "link": 3,
+      "back": 3,
+      "deploy": 0,
+      "loading": 0,
+      "responsive": 0,
+      "posting": 0,
+      "pagination": 0,
+      "reply": 0,
+      "env": 1
+    }
+  },
+  "server": {
+    "basic": {
+      "json": 0,
+      "setting": 0,
+      "run": 0,
+      "readme": 0,
+      "secret": 0,
+      "controller": 0,
+      "router": 0,
+      "model": 0,
+      "docs": 0,
+      "error_server": 0,
+      "data": 0,
+      "db": 0,
+      "env": 0,
+      "git": 0,
+      "advanced": {
+        "link": 0,
+        "back": 0,
+        "deploy": 0,
+        "loading": 0,
+        "responsive": 0,
+        "posting": 0,
+        "pagination": 0,
+        "reply": 0,
+        "env": 0
+      }
+    }
+  }
+}
