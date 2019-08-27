@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import {Button, ListGroup, Table, Dropdown} from 'react-bootstrap';
-import Header from './Header.js'
 import {Route, Link, withRouter} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './App.css';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import fontawesome from '@fortawesome/fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
+
+fontawesome.library.add(faCheckSquare);
 
 
 export class Home extends Component {
@@ -97,7 +99,7 @@ export class User extends Component {
 
     async componentDidMount() {
         //fetch
-        let obj = await axios.get('https://koreanjson.com/users');
+        let obj = await axios.get('http://localhost:3002/users');
         this.setState({
             data: obj.data
         })
@@ -164,7 +166,7 @@ export class SelectedUser extends Component {
         //fetch
         let id = this.props.match.params.id;
         id = id.substring(1);
-        let obj = await axios.get('https://koreanjson.com/users/' + id);
+        let obj = await axios.get('http://localhost:3002/users/' + id);
         this.setState({
             data: obj.data,
             id: obj.data.id
@@ -180,14 +182,13 @@ export class SelectedUser extends Component {
             selectedId: id
         })
 
-        //fetch
 
-        let obj = await axios.get('https://koreanjson.com/todos?/userId=' + id);
+        //fetch
+        let obj = await axios.get('http://localhost:3002/todos?userId=' + id);
         console.log(obj);
         this.setState({
             todos: obj.data,
         })
-
 
     }
 
@@ -237,10 +238,9 @@ export class SelectedUser extends Component {
                         <Dropdown.Menu className = "dropdown-menu">
                             {
                                 this.state.todos.map((todo) => {
-                                    console.log(todo.completed);
+                                    // console.log(todo.completed);
                                     return (
                                         <Dropdown.Item href="#/action-1" key={todo.id}>
-                                            {/*<div><i className={(todo.completed)? "fas fa-check" : ""}/><span>{todo.title}</span></div>*/}
                                             <div><FontAwesomeIcon icon={(todo.completed)? faCheckSquare : ""}/><span>{todo.title}</span></div>
                                         </Dropdown.Item>
                                     )
@@ -260,11 +260,9 @@ export class SelectedUser extends Component {
                 <div>
                     <ListGroup>
                         <ListGroup.Item className={this.state.selectedId === 0 ? "active" : ''} onClick={() => {
-
                             this.selectId(0)
                         }}>유저프로필</ListGroup.Item>
                         <ListGroup.Item className={this.state.selectedId === 1 ? "active" : ''} onClick={() => {
-
                             this.selectId(1)
                         }}>투두</ListGroup.Item>
                     </ListGroup>
