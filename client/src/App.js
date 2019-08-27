@@ -10,8 +10,8 @@ import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
 
 fontawesome.library.add(faCheckSquare);
 
-const stage = 'AWS';
-const Host = stage === 'AWS' ? "http://first-react-app.s3-website.ap-northeast-2.amazonaws.com" : "http://localhost:3002";
+const stage = 'local';
+const Host = stage === 'AWS' ? "http://first-react-app.s3-website.ap-northeast-2.amazonaws.com:3002" : "http://localhost:3002";
 
 
 export class Home extends Component {
