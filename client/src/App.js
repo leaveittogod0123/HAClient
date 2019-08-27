@@ -10,6 +10,9 @@ import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
 
 fontawesome.library.add(faCheckSquare);
 
+const stage = 'AWS';
+const Host = stage === 'AWS' ? "http://first-react-app.s3-website.ap-northeast-2.amazonaws.com" : "http://localhost:3002";
+
 
 export class Home extends Component {
     render() {
@@ -99,7 +102,7 @@ export class User extends Component {
 
     async componentDidMount() {
         //fetch
-        let obj = await axios.get('http://localhost:3002/users');
+        let obj = await axios.get(`${Host}/users`);
         this.setState({
             data: obj.data
         })
@@ -166,7 +169,7 @@ export class SelectedUser extends Component {
         //fetch
         let id = this.props.match.params.id;
         id = id.substring(1);
-        let obj = await axios.get('http://localhost:3002/users/' + id);
+        let obj = await axios.get(`${Host}/users/${id}`);
         this.setState({
             data: obj.data,
             id: obj.data.id
@@ -184,7 +187,7 @@ export class SelectedUser extends Component {
 
 
         //fetch
-        let obj = await axios.get('http://localhost:3002/todos?userId=' + id);
+        let obj = await axios.get(`${Host}/todos?userId=${id}`);
         console.log(obj);
         this.setState({
             todos: obj.data,
